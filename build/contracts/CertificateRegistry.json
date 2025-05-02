@@ -12509,10 +12509,74 @@
       "links": {},
       "address": "0x4f1E41fD46D4C89B4611Df3CaE0508e391653Cab",
       "transactionHash": "0xe2562aed385148f159ff3b2e9558ee77ebc21dc53d0af236e59dbebe93310fa5"
+    },
+    "1746219173950": {
+      "events": {
+        "0x03f262da71aacb4fd3ac953d335e55d4e2ea91176b1a20485c500341130b10e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "string",
+              "name": "certificateId",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "internalType": "string",
+              "name": "cid",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "issuer",
+              "type": "address"
+            }
+          ],
+          "name": "CertificateIssued",
+          "type": "event"
+        },
+        "0x266095b5af7e2323760fef151f1d78896740cd2cc1b73a6357ff9e4c3fdae740": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "string",
+              "name": "certificateId",
+              "type": "string"
+            }
+          ],
+          "name": "CertificateRevoked",
+          "type": "event"
+        },
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x5faF3224F22c749c1E5FC96db2183264D940Bda5",
+      "transactionHash": "0x35718c10c295d2e1569bb7d4179a5fb120ffa54a75063a804b372eee2bc50bdf"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2025-05-02T20:16:30.783Z",
+  "updatedAt": "2025-05-02T20:58:13.926Z",
   "networkType": "ethereum",
   "devdoc": {
     "errors": {
