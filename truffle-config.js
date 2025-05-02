@@ -1,4 +1,27 @@
 /**
+ * @type import('hardhat/config').HardhatUserConfig
+ * Use this file to configure your truffle project. It's seeded with some
+ * common settings for different networks and features like migrations,
+ * compilation, and testing. Uncomment the ones you need or modify
+ * them to suit your project as necessary.
+ *
+ * More information about configuration can be found at:
+ *
+ * https://trufflesuite.com/docs/truffle/reference/configuration
+ *
+ * Requirements:
+ * - Node.js v14+ installed
+ * - npm or yarn package manager
+ * - Truffle Suite installed globally: npm install -g truffle
+ * - Ganache for local blockchain: npm install -g ganache
+ * - MetaMask browser extension for testing
+ * - .env file with required environment variables
+ * - Required npm packages:
+ *   - @truffle/hdwallet-provider
+ *   - dotenv
+ *   - web3
+ *
+ * @type import('hardhat/config').HardhatUserConfig
  * Use this file to configure your truffle project. It's seeded with some
  * common settings for different networks and features like migrations,
  * compilation, and testing. Uncomment the ones you need or modify
@@ -64,11 +87,11 @@ module.exports = {
     // tab if you use this network and you must also set the `host`, `port` and `network_id`
     // options below to some value.
     //
-    // development: {
-    //  host: "127.0.0.1",     // Localhost (default: none)
-    //  port: 8545,            // Standard Ethereum port (default: none)
-    //  network_id: "*",       // Any network (default: none)
-    // },
+    development: {
+     host: "127.0.0.1",     // Localhost (default: none)
+     port: 8545,            // Standard Ethereum port (default: none)
+     network_id: "*",       // Any network (default: none)
+    },
     //
     // An additional network, but with some advanced options…
     // advanced: {
