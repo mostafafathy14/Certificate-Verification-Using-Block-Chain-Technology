@@ -1,6 +1,7 @@
 import streamlit as st
 from web3 import Web3
 import os
+import json
 from dotenv import load_dotenv
 from ipfs import generate_certificate, generate_certificate_id
 
@@ -10,146 +11,16 @@ load_dotenv()
 # Connect to Ganache
 w3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8545"))
 contract_address = os.getenv("CONTRACT_ADDRESS")
-contract_abi = [
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "initialOwner",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "nonpayable",
-        "type": "constructor"
-    },
-    {
-        "anonymous": False,
-        "inputs": [
-            {
-                "indexed": False,
-                "internalType": "string",
-                "name": "certificateId",
-                "type": "string"
-            },
-            {
-                "indexed": False,
-                "internalType": "string",
-                "name": "cid",
-                "type": "string"
-            },
-            {
-                "indexed": False,
-                "internalType": "address",
-                "name": "issuer",
-                "type": "address"
-            }
-        ],
-        "name": "CertificateIssued",
-        "type": "event"
-    },
-    {
-        "anonymous": False,
-        "inputs": [
-            {
-                "indexed": False,
-                "internalType": "string",
-                "name": "certificateId",
-                "type": "string"
-            }
-        ],
-        "name": "CertificateRevoked",
-        "type": "event"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "certificateId",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "cid",
-                "type": "string"
-            }
-        ],
-        "name": "issueCertificate",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "certificateId",
-                "type": "string"
-            }
-        ],
-        "name": "revokeCertificate",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "certificateId",
-                "type": "string"
-            }
-        ],
-        "name": "verifyCertificate",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            },
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            },
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "",
-                "type": "string"
-            }
-        ],
-        "name": "certificates",
-        "outputs": [
-            {
-                "internalType": "string",
-                "name": "cid",
-                "type": "string"
-            },
-            {
-                "internalType": "address",
-                "name": "issuer",
-                "type": "address"
-            },
-            {
-                "internalType": "bool",
-                "name": "revoked",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    }
-]
+
+# Load ABI from build/contracts/CertificateRegistry.json
+try:
+    with open('build/contracts/CertificateRegistry.json') as f:
+        contract_data = json.load(f)
+        contract_abi = contract_data['abi']
+except FileNotFoundError:
+    st.error("Error: build/contracts/CertificateRegistry.json not found. Run 'truffle compile' first.")
+    st.stop()
+
 contract = w3.eth.contract(address=contract_address, abi=contract_abi)
 
 # Streamlit UI

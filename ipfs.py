@@ -10,7 +10,7 @@ def generate_certificate(output_path: str, uid: str, candidate_name: str, course
     
     university_name = "Cairo University"
 
-    if logo_path:
+    if logo_path and os.path.exists(logo_path):
         logo = Image(logo_path, width=150, height=150)
         elements.append(logo)
 
@@ -41,16 +41,16 @@ def generate_certificate(output_path: str, uid: str, candidate_name: str, course
         parent=getSampleStyleSheet()["BodyText"],
         fontSize=14,
         leading=18,
-        alignment=1, 
+        alignment=1,
         spaceAfter=12,
     )
     recipient_text = (
         "This is to certify that<br/><br/>"
-        f"<strong><span style='color:red'>{candidate_name}</span></strong><br/>"
+        f"<b><font color='red'>{candidate_name}</font></b><br/>"
         "bearing the Unique Identification Number (UID):<br/>"
-        f"<strong><span style='color:red'>{uid}</span></strong><br/><br/>"
+        f"<b><font color='red'>{uid}</font></b><br/><br/>"
         "has successfully completed the course<br/>"
-        f"<strong><span style='color:blue'>{course_name}</span></strong>."
+        f"<b><font color='blue'>{course_name}</font></b>."
     )
     recipient = Paragraph(recipient_text, recipient_style)
     elements.append(recipient)

@@ -3,33 +3,33 @@ Starting RPC server
 
 Available Accounts
 ==================
-(0) 0xdA2AFBcb48dD732e76c27dF31fCc76d292CD7a76 (1000 ETH)
-(1) 0x7C0EAD20bF5b0E2edf0C9c248E6a3f32b74206b4 (1000 ETH)
-(2) 0xe451017b1d1C2ecd4a587809c858FfA59c5864cA (1000 ETH)
-(3) 0x57CDD48C8899e2f90a0c36756E8e63B6CFFD9eb0 (1000 ETH)
-(4) 0xC1Fb15904973f91a52021a6a2D4471ac1F192F4d (1000 ETH)
-(5) 0xDe4108870cb478FC35C0F0e651efD6F7173e6bBd (1000 ETH)
-(6) 0x406e21c4fF0b1785846c3f8A0509c2399331F5CB (1000 ETH)
-(7) 0x368f789c01689eB2A7be148395b75fF9C5D0B75E (1000 ETH)
-(8) 0xFF6F160216616B96290D7803fbB33ABecd2534F9 (1000 ETH)
-(9) 0x4E8aefE59a7Dc21a84503dC92d4c14B6ceee4FdE (1000 ETH)
+(0) 0xE7515AdBa9Ad1EF2bA7216Ad5bF4DF5a8ce2010F (1000 ETH)
+(1) 0xF3ea189AffcC34944ea689E12581a4e3c79b1820 (1000 ETH)
+(2) 0x6961593A99e58b09D320165D642321De6D5EA27b (1000 ETH)
+(3) 0x214490Cda721d11f663D7365045aE45b553f0108 (1000 ETH)
+(4) 0xF9a5f987dB95B5f42C6e5e03a58EB70aCdB5C54c (1000 ETH)
+(5) 0xDBB9b546ce87Ca1Cac6DF1B03e948deF870BD419 (1000 ETH)
+(6) 0xdd3752913dC047c5F9Cad63A3295263FdD708F58 (1000 ETH)
+(7) 0x937db21f327E530d0DfeBBEbaFC960d954945919 (1000 ETH)
+(8) 0x28CAC894A18a213aCee92305362492437692B459 (1000 ETH)
+(9) 0x888DE730bc7921ec236675ac7733081a555cF93B (1000 ETH)
 
 Private Keys
 ==================
-(0) 0xbfbb796cbb88e880aca2ccb6300cb7c44604e3ed02d0d82e952d8d4d77738df4
-(1) 0xad840656e65266ee4d76099f0d32c02e897fd544be730d80e7739c92a18ded1a
-(2) 0xec0e666f8fb3814ce800b4fa3903064d25e6fa08a2a117eaaee40b8ee087688e
-(3) 0x77e1c69f1389cc425965e9b6540dd6dc32b9a0193b4db13afbbc23eb2015c05f
-(4) 0x3d9b2a7dd3eef06f78505a4e922019da91fc773e87e307c6dd2ce0fa9f7ca44d
-(5) 0x0a5d615a7cd5fd25310bf0c752e11e03ee287116216e5ac3c7d0ca3ee29e0640
-(6) 0x9229ac17ce751d9fc4f92cdddb3f1b3710701ad00ac1215c600053f7b321d8ac
-(7) 0x69edd2fe524ce7102fe20b3d0221df9598229dc1f3daa95ecc60e57187ac1971
-(8) 0x61f7b10adecd187d409e0f774c5c7aab3f6b05e61abd0959c7c3aa1e25f333fb
-(9) 0xeafc4a826e0928c9a5e4466d1b07240befff5b1c57d620f25295d25205a6099d
+(0) 0xc4a3e0e65a7bc78e5dec2adf93a7ffe4a4c0fcf1872093ee1eef339f2a0dfeb0
+(1) 0xfbf181915fc68f70377ffccb5ca5f64ac4faca485cd755e9f82cea41d4309349
+(2) 0xaef7bb2d716d308bef03eb0e3addba4658249bce75dc3cc3b8c734ab65dba2c1
+(3) 0x17d890b23cb2e20d843691504e3c8d4e3b51c2601a15d10f90deefabd41a035b
+(4) 0x1bc26f899f634559079c16ae41930f744a8ea5421f6ed5e40e0328a69b4ac3d3
+(5) 0xc665925f2668b7e6416e91e06d19bc1a1f51ccfe56890f1481b22ad9990dce4e
+(6) 0xeedad5fcb0064ba9f7c3f59d50989c6b1dcf4a14618c5a73fadda3df80831f8e
+(7) 0xf6f4fb7145ea60a446ea0a820e8b349dd6def8f61a9ab31cbe8dbb43aa077612
+(8) 0x29423cf4293f24e652321c2b9745cce34e42e2fac86f61747c49be387803b394
+(9) 0x16f9354fc7a916c2c0133603e2a41e19952648fe3af6027618b29930740811f9
 
 HD Wallet
 ==================
-Mnemonic:      mimic two betray reveal wave ranch economy crouch coconut average siren catch
+Mnemonic:      force divorce body angle right flat service picnic harsh promote crew slender
 Base HD Path:  m/44'/60'/0'/0/{account_index}
 
 Default Gas Price
@@ -69,11 +69,11 @@ eth_getBlockByNumber
 eth_gasPrice
 eth_sendTransaction
 
-  Transaction: 0xf38d3646a3330ea32aa4e5accac9191739d1db3168425155ba1d6889aa80fc05
-  Contract created: 0xc82c265cb87f4e5911d973961547ad3074c46dcf
+  Transaction: 0xe1f8aece0f76c81a196ef62cfcf47c739601d4bee3757e3aab6ed28d384a4c16
+  Contract created: 0x3fab3887f21c9447f19214cc3855d5546d86a59c
   Gas usage: 326842
   Block number: 1
-  Block time: Tue May 06 2025 12:38:13 GMT+0300 (Eastern European Summer Time)
+  Block time: Tue May 06 2025 12:55:56 GMT+0300 (Eastern European Summer Time)
 
 eth_getTransactionReceipt
 eth_getCode
@@ -87,10 +87,10 @@ eth_getBlockByNumber
 eth_gasPrice
 eth_sendTransaction
 
-  Transaction: 0xc05973552d25d705c242aaf953474a177f6c5dd74cd4514da6f488ad568a4361
+  Transaction: 0x0c3616bbf6a07320be998591bfa462f24994e684ee1b8f374dff301404ade040
   Gas usage: 45929
   Block number: 2
-  Block time: Tue May 06 2025 12:38:13 GMT+0300 (Eastern European Summer Time)
+  Block time: Tue May 06 2025 12:55:56 GMT+0300 (Eastern European Summer Time)
 
 eth_getTransactionReceipt
 eth_getBlockByNumber
@@ -109,11 +109,11 @@ eth_getBlockByNumber
 eth_gasPrice
 eth_sendTransaction
 
-  Transaction: 0x55271c4a264962fdcda17a4cc54ae36d9d6f2c58f9fdec5ebd9806b57376798a
-  Contract created: 0x477d4d092469607385d7e2cecabfc564301ca904
+  Transaction: 0x7e155e1f02edaed74055e4951c3ff83ef56b06c622be3c966b829fbf00f6727d
+  Contract created: 0x437eadaaf9f589cc08a5ecba8284ea9d66b00f4b
   Gas usage: 1003352
   Block number: 3
-  Block time: Tue May 06 2025 12:38:14 GMT+0300 (Eastern European Summer Time)
+  Block time: Tue May 06 2025 12:55:56 GMT+0300 (Eastern European Summer Time)
 
 eth_getTransactionReceipt
 eth_getCode
@@ -127,32 +127,43 @@ eth_getBlockByNumber
 eth_gasPrice
 eth_sendTransaction
 
-  Transaction: 0x214a17639051d0671795aa601ea61ff6c0971a2fea3b6d1fa68ac77fbf18ec63
+  Transaction: 0x821973c210d26bae330400fda56c566b60c2e1a8b4d90d951c85ee0ec8cd2b69
   Gas usage: 28829
   Block number: 4
-  Block time: Tue May 06 2025 12:38:14 GMT+0300 (Eastern European Summer Time)
+  Block time: Tue May 06 2025 12:55:56 GMT+0300 (Eastern European Summer Time)
 
 eth_getTransactionReceipt
+eth_accounts
+eth_getBlockByNumber
+eth_chainId
+eth_chainId
+eth_estimateGas
+eth_chainId
+eth_getBlockByNumber
+eth_sendTransaction
+
+  Transaction: 0xcb5ecd93a76c73a9ba7f816a9af8c158a0af1258f7e61c00b636e924be04c2cf
+  Gas usage: 145696
+  Block number: 5
+  Block time: Tue May 06 2025 12:56:18 GMT+0300 (Eastern European Summer Time)
+
+eth_chainId
+eth_chainId
+eth_call
+eth_chainId
+eth_chainId
+eth_call
+eth_chainId
+eth_chainId
+eth_call
+eth_chainId
+eth_chainId
+eth_call
+eth_chainId
 
 Received shutdown signal: SIGINT
 Shutting down…
 Server has been shut down
-fCc76d292CD7a76
-   > balance:             999.995563877202891145
-   > gas used:            1003352 (0xf4f58)
-   > gas price:           3.172301144 gwei
-   > value sent:          0 ETH
-   > total cost:          0.003182934697434688 ETH
-
-- Saving migration to chain.
-   > Saving migration to chain.
-   > Saving artifacts
-   -------------------------------------
-   > Total cost:     0.003182934697434688 ETH
-
-Summary
-=======
-> Total deployments:   2
-> Final cost:          0.004286026447434688 ETH
+.004286026447434688 ETH
 
 
