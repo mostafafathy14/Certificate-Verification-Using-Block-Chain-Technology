@@ -138,7 +138,7 @@ def run_streamlit():
     global streamlit_process
     print("🚀 Running Streamlit...")
     streamlit_process = subprocess.Popen(
-        ["streamlit", "run", "app.py"],
+        [sys.executable, "-m", "streamlit", "run", "app.py"],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         cwd=PROJECT_DIR

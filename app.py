@@ -3,7 +3,8 @@ from web3 import Web3
 import os
 import json
 from dotenv import load_dotenv
-from ipfs import generate_certificate, generate_certificate_id
+from ipfs import generate_certificate, generate_certificate_id, upload_to_pinata
+from ipfs import upload_to_pinata  
 
 # Load environment variables
 load_dotenv()
@@ -49,14 +50,27 @@ if option == "Generate Certificate":
             pdf_path = None
 
         if pdf_path and os.path.exists(pdf_path):
-            filename = f"{cert_id}.pdf"
             try:
-                tx_hash = contract.functions.issueCertificate(cert_id, filename).transact({"from": w3.eth.accounts[0]})
-                st.success(f"Certificate generated successfully! Transaction Hash: {tx_hash.hex()}")
+                # ⬇️ Upload to IPFS and get the CID
+                cid = upload_to_pinata(pdf_path)
+                
+                # ⬇️ Call smart contract with cert_id and CID
+                try:
+                    cid = upload_to_pinata(pdf_path)
+                    tx_hash = contract.functions.issueCertificate(cert_id, cid).transact({"from": w3.eth.accounts[0]})
+                    st.success(f"✅ Certificate uploaded to IPFS and issued on-chain!")
+                    st.write(f"📄 IPFS CID: `{cid}`")
+                    st.write(f"🔗 IPFS URL: https://gateway.pinata.cloud/ipfs/{cid}")
+                    st.write(f"📄 Certificate ID: `{cert_id}`")
+                except Exception as e:
+                    st.error(f"❌ IPFS upload or blockchain transaction failed: {e}")
+                
+                st.success(f"Certificate generated and uploaded to IPFS! Transaction Hash: {tx_hash.hex()}")
                 st.write(f"Certificate ID: {cert_id}")
-                st.write(f"Local File: {pdf_path}")
+                st.write(f"IPFS CID: {cid}")
+                st.markdown(f"[View on IPFS](https://ipfs.io/ipfs/{cid})")
             except Exception as e:
-                st.error(f"Blockchain transaction failed: {e}")
+                st.error(f"Blockchain or IPFS operation failed: {e}")
         else:
             st.error("Failed to generate certificate PDF")
 
@@ -69,13 +83,13 @@ elif option == "Verify Certificate":
                 st.write(f"Issuer: {issuer}")
                 st.write(f"Revoked: {revoked}")
                 if not revoked:
-                    filename = contract.functions.certificates(cert_id).call()[0]
-                    full_path = os.path.join("certificates", filename)
-                    if os.path.exists(full_path):
-                        with open(full_path, "rb") as f:
-                            st.download_button("Download Certificate", f.read(), file_name=filename)
-                    else:
-                        st.error("Certificate file not found locally")
+                    cid = contract.functions.certificates(cert_id).call()[0]
+                    ipfs_url = f"https://ipfs.io/ipfs/{cid}"
+
+                    st.markdown(f"[Download Certificate from IPFS]({ipfs_url})")
+
+                    # Optional: show iframe preview
+                    st.components.v1.iframe(ipfs_url, height=600)
             else:
                 st.error("Certificate does not exist")
         except Exception as e:

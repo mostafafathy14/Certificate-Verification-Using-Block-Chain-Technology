@@ -1,13 +1,19 @@
-
+
 Compiling your contracts...
 ===========================
-> Everything is up to date, there is nothing to compile.
+> Compiling @openzeppelin\contracts\access\Ownable.sol
+> Compiling @openzeppelin\contracts\utils\Context.sol
+> Compiling .\contracts\CertificateRegistry.sol
+> Compiling .\contracts\Migrations.sol
+> Artifacts written to D:\College & Courses\Certificate-Verification-Using-Block-Chain-Technology\build\contracts
+> Compiled successfully using:
+   - solc: 0.8.21+commit.d9974bed.Emscripten.clang
 
 
 Starting migrations...
 ======================
 > Network name:    'development'
-> Network id:      1746586209776
+> Network id:      1750893370530
 > Block gas limit: 30000000 (0x1c9c380)
 
 
@@ -16,12 +22,12 @@ Starting migrations...
 
    Deploying 'Migrations'
    ----------------------
-   > transaction hash:    0x4168ffee7f26aa017244579ba6b4a20a61dae3ebe496e3b1e1e4afb7c4fd2371
+   > transaction hash:    0x6f2e178eeb88301e3f964de73981f8071c61a71a50f1f235be1f3ea1d2c6807f
    > Blocks: 0            Seconds: 0
-   > contract address:    0x52b61e40c7fd47A73C44903e6841087E12cbDF3d
+   > contract address:    0xF1cb2Dd67ea14A75DE595Ca0414094969f03e561
    > block number:        1
-   > block timestamp:     1746586219
-   > account:             0xb99Eb5AA92766972fbB3CC4Ea13302BA664279FE
+   > block timestamp:     1750893380
+   > account:             0xbC78bC3392d08022F8e9E1B0B6b1d2699C37466a
    > balance:             999.99889690825
    > gas used:            326842 (0x4fcba)
    > gas price:           3.375 gwei
@@ -39,12 +45,12 @@ Starting migrations...
 
    Deploying 'CertificateRegistry'
    -------------------------------
-   > transaction hash:    0x4b7f1cc47e19495f210fac184cd725efd3325b4eb45fa31abb4e9713df25568a
+   > transaction hash:    0xb4d5ecf2667b6f316e34b97452d164d86332083ca66c3e6e1cb705c7ae157637
    > Blocks: 0            Seconds: 0
-   > contract address:    0x3E84D63d314B7199f33cF1FbD7F564a07Cde1255
+   > contract address:    0xf6f8536cDd34c92178002213525B7534b6d792dc
    > block number:        3
-   > block timestamp:     1746586219
-   > account:             0xb99Eb5AA92766972fbB3CC4Ea13302BA664279FE
+   > block timestamp:     1750893380
+   > account:             0xbC78bC3392d08022F8e9E1B0B6b1d2699C37466a
    > balance:             999.995563877202891145
    > gas used:            1003352 (0xf4f58)
    > gas price:           3.172301144 gwei
@@ -60,6 +66,18 @@ Summary
 =======
 > Total deployments:   2
 > Final cost:          0.004286026447434688 ETH
+
+
+This version of µWS is not compatible with your Node.js build:
+
+Error: Cannot find module '../binaries/uws_win32_x64_127.node'
+Require stack:
+- C:\Users\LENOVO\AppData\Roaming\npm\node_modules\truffle\node_modules\ganache\node_modules\@trufflesuite\uws-js-unofficial\src\uws.js
+- C:\Users\LENOVO\AppData\Roaming\npm\node_modules\truffle\node_modules\ganache\dist\node\core.js
+- C:\Users\LENOVO\AppData\Roaming\npm\node_modules\truffle\build\migrate.bundled.js
+- C:\Users\LENOVO\AppData\Roaming\npm\node_modules\truffle\node_modules\original-require\index.js
+- C:\Users\LENOVO\AppData\Roaming\npm\node_modules\truffle\build\cli.bundled.js
+Falling back to a NodeJS implementation; performance may be degraded.
 
 
 - Blocks: 0            Seconds: 0

@@ -3,6 +3,36 @@ import hashlib
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+import requests
+
+def upload_to_pinata(filepath: str) -> str:
+    """Uploads the file to Pinata and returns the CID (IPFS hash)."""
+    api_key = os.getenv("PINATA_API_KEY")
+    api_secret = os.getenv("PINATA_API_SECRET")
+
+    if not api_key or not api_secret:
+        raise EnvironmentError("Pinata API credentials are missing in .env")
+
+    url = "https://api.pinata.cloud/pinning/pinFileToIPFS"
+    headers = {
+        "pinata_api_key": api_key,
+        "pinata_secret_api_key": api_secret,
+    }
+
+    with open(filepath, "rb") as file:
+        files = {
+            "file": (os.path.basename(filepath), file),
+        }
+        response = requests.post(url, files=files, headers=headers)
+
+    if response.status_code == 200:
+        cid = response.json()["IpfsHash"]
+        print(f"Uploaded to IPFS: {cid}")
+        return cid
+    else:
+        print(f"Failed to upload to IPFS: {response.status_code}, {response.text}")
+        raise Exception("IPFS upload failed")
+
 
 def generate_certificate(output_path: str, uid: str, candidate_name: str, course_name: str, logo_path: str) -> None:
     doc = SimpleDocTemplate(output_path, pagesize=letter)
