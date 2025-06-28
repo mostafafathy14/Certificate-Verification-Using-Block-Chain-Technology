@@ -20,7 +20,7 @@ Run: `npm install -g truffle`
  Run: `pip install web3`
 
 **IPFS (Pinata)**: For decentralized storage.  
- Install Pinata SDK: `pip install pinata-sdk` (requires a Pinata account and API keys from https://pinata.cloud/).
+ Install Pinata SDK: `pip install Pinata-Python` (requires a Pinata account and API keys from https://pinata.cloud/).
 
 ### 2.Build The Project
 
