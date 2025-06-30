@@ -1,16 +1,16 @@
 import streamlit as st
-from web3 import Web3
+from web3 import Web3, HTTPProvider
 import os
 import json
 from dotenv import load_dotenv
 from ipfs import generate_certificate, generate_certificate_id, upload_to_pinata
-from ipfs import upload_to_pinata  
 
 # Load environment variables
 load_dotenv()
 
-# Connect to Ganache
-w3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8545"))
+# Connect to Ganache with extended timeout
+provider = HTTPProvider("http://127.0.0.1:8545", request_kwargs={"timeout": 60})
+w3 = Web3(provider)
 contract_address = os.getenv("CONTRACT_ADDRESS")
 
 # Load ABI from build/contracts/CertificateRegistry.json
@@ -25,10 +25,13 @@ except FileNotFoundError:
 contract = w3.eth.contract(address=contract_address, abi=contract_abi)
 
 # Streamlit UI
-st.title("Certificate Verification System")
+st.title("🎓 Certificate Verification System")
 
 option = st.selectbox("Choose an action", ["Generate Certificate", "Verify Certificate"])
 
+# ---------------------------------------------------------------
+# GENERATE CERTIFICATE
+# ---------------------------------------------------------------
 if option == "Generate Certificate":
     with st.form("Generate-Certificate"):
         uid = st.text_input("UID")
@@ -46,51 +49,78 @@ if option == "Generate Certificate":
         try:
             generate_certificate(pdf_path, uid, candidate_name, course_name, logo_path)
         except Exception as e:
-            st.error(f"Error generating certificate: {e}")
-            pdf_path = None
+            st.error(f"❌ Error generating certificate: {e}")
+            st.stop()
 
-        if pdf_path and os.path.exists(pdf_path):
-            try:
-                # ⬇️ Upload to IPFS and get the CID
-                cid = upload_to_pinata(pdf_path)
-                
-                # ⬇️ Call smart contract with cert_id and CID
-                try:
-                    cid = upload_to_pinata(pdf_path)
-                    tx_hash = contract.functions.issueCertificate(cert_id, cid).transact({"from": w3.eth.accounts[0]})
-                    st.success(f"✅ Certificate uploaded to IPFS and issued on-chain!")
-                    st.write(f"📄 IPFS CID: `{cid}`")
-                    st.write(f"🔗 IPFS URL: https://gateway.pinata.cloud/ipfs/{cid}")
-                    st.write(f"📄 Certificate ID: `{cert_id}`")
-                except Exception as e:
-                    st.error(f"❌ IPFS upload or blockchain transaction failed: {e}")
-                
-                st.success(f"Certificate generated and uploaded to IPFS! Transaction Hash: {tx_hash.hex()}")
-                st.write(f"Certificate ID: {cert_id}")
-                st.write(f"IPFS CID: {cid}")
-                st.markdown(f"[View on IPFS](https://ipfs.io/ipfs/{cid})")
-            except Exception as e:
-                st.error(f"Blockchain or IPFS operation failed: {e}")
-        else:
-            st.error("Failed to generate certificate PDF")
+        if not os.path.exists(pdf_path):
+            st.error("❌ PDF generation failed.")
+            st.stop()
 
+        try:
+            cid = upload_to_pinata(pdf_path)
+        except Exception as e:
+            st.error(f"❌ IPFS upload failed: {e}")
+            cid = "Unavailable"
+
+        # ✅ Display output before blockchain
+        st.success("📄 Certificate generated successfully!")
+        st.write(f"🆔 Certificate ID: `{cert_id}`")
+        st.write(f"👤 Candidate: `{candidate_name}`")
+        st.write(f"📚 Course: `{course_name}`")
+        st.write(f"🏢 Organization: `{org_name}`")
+        st.write(f"🔖 UID: `{uid}`")
+        st.write(f"🧾 IPFS CID: `{cid}`")
+        if cid != "Unavailable":
+            st.markdown(f"🔗 [View on IPFS](https://gateway.pinata.cloud/ipfs/{cid})")
+
+        with open(pdf_path, "rb") as f:
+            st.download_button("⬇️ Download Certificate PDF", f, file_name=f"{cert_id}.pdf")
+
+        # Try blockchain interaction separately
+        try:
+            tx_hash = contract.functions.issueCertificate(
+                cert_id, cid, uid, candidate_name, course_name, org_name
+            ).transact({"from": w3.eth.accounts[0]})
+            st.success("✅ Certificate issued on blockchain")
+            st.write(f"📦 Transaction Hash: `{tx_hash.hex()}`")
+        except Exception as e:
+            st.warning(f"⚠️ Blockchain operation failed or skipped: {e}")
+
+# ---------------------------------------------------------------
+# VERIFY CERTIFICATE
+# ---------------------------------------------------------------
 elif option == "Verify Certificate":
-    cert_id = st.text_input("Certificate ID")
+    cert_id = st.text_input("Enter Certificate ID")
     if st.button("Verify"):
         try:
-            exists, issuer, revoked = contract.functions.verifyCertificate(cert_id).call()
-            if exists:
-                st.write(f"Issuer: {issuer}")
-                st.write(f"Revoked: {revoked}")
-                if not revoked:
-                    cid = contract.functions.certificates(cert_id).call()[0]
-                    ipfs_url = f"https://ipfs.io/ipfs/{cid}"
+            result = contract.functions.verifyCertificate(cert_id).call()
+            exists = result[0]
 
-                    st.markdown(f"[Download Certificate from IPFS]({ipfs_url})")
-
-                    # Optional: show iframe preview
-                    st.components.v1.iframe(ipfs_url, height=600)
+            if not exists:
+                st.error("❌ Certificate does not exist")
             else:
-                st.error("Certificate does not exist")
+                uid = result[1]
+                name = result[2]
+                course = result[3]
+                org = result[4]
+                cid = result[5]
+                issuer = result[6]
+                revoked = result[7]
+                issued_at = result[8]
+
+                st.success("✅ Certificate found!")
+                st.write(f"👤 Name: `{name}`")
+                st.write(f"🆔 UID: `{uid}`")
+                st.write(f"📚 Course: `{course}`")
+                st.write(f"🏢 Organization: `{org}`")
+                st.write(f"📅 Issued At (UNIX): `{issued_at}`")
+                st.write(f"👮 Issuer: `{issuer}`")
+                st.write(f"❌ Revoked: `{revoked}`")
+                st.write(f"🧾 IPFS CID: `{cid}`")
+
+                ipfs_url = f"https://ipfs.io/ipfs/{cid}"
+                st.markdown(f"[Download Certificate from IPFS]({ipfs_url})")
+                st.components.v1.iframe(ipfs_url, height=600)
+
         except Exception as e:
-            st.error(f"Error: {e}")
+            st.error(f"❌ Error verifying certificate: {e}")
