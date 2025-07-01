@@ -13,7 +13,7 @@ Compiling your contracts...
 Starting migrations...
 ======================
 > Network name:    'development'
-> Network id:      1751377929424
+> Network id:      1751387575484
 > Block gas limit: 30000000 (0x1c9c380)
 
 
@@ -22,12 +22,12 @@ Starting migrations...
 
    Deploying 'Migrations'
    ----------------------
-   > transaction hash:    0xeda9441bc07a206223d831f529d333423a0135d00fc55002a829719d194a42a1
+   > transaction hash:    0x842a6c9cc41e72172650d36ce9f1781b31e3d74541069fd5ec526c27a6c92242
    > Blocks: 0            Seconds: 0
-   > contract address:    0x258aa68019249237A5F9327B3434d25d62c96B42
+   > contract address:    0xe78A0F7E598Cc8b0Bb87894B0F60dD2a88d6a8Ab
    > block number:        1
-   > block timestamp:     1751377938
-   > account:             0xd5c3Cdd047A825813AFfb285eb82f5cD09e73c93
+   > block timestamp:     1751387581
+   > account:             0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1
    > balance:             999.99889690825
    > gas used:            326842 (0x4fcba)
    > gas price:           3.375 gwei
@@ -45,12 +45,12 @@ Starting migrations...
 
    Deploying 'CertificateRegistry'
    -------------------------------
-   > transaction hash:    0x4b616d05c52909f214d3cfb9f52432b0ac2e970f06118a155ed924bf2ed69230
+   > transaction hash:    0xf4caea720119a57c9abd81ba5f471f50231b3b12f4e2df5e0feb8fb21bb1b227
    > Blocks: 0            Seconds: 0
-   > contract address:    0xd0f1AD42d3AD89020F9dD84E75909659Fe98e44F
+   > contract address:    0xCfEB869F69431e42cdB54A4F4f105C19C080A601
    > block number:        3
-   > block timestamp:     1751377938
-   > account:             0xd5c3Cdd047A825813AFfb285eb82f5cD09e73c93
+   > block timestamp:     1751387581
+   > account:             0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1
    > balance:             999.994202896566092265
    > gas used:            1432372 (0x15db34)
    > gas price:           3.172301144 gwei

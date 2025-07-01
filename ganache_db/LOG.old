@@ -1,0 +1,5 @@
+2025/07/01-20:09:03.179 ce68 Recovering log #21
+2025/07/01-20:09:03.179 ce68 Level-0 table #23: started
+2025/07/01-20:09:03.193 ce68 Level-0 table #23: 28960 bytes OK
+2025/07/01-20:09:03.202 ce68 Delete type=0 #21
+2025/07/01-20:09:03.202 ce68 Delete type=3 #19

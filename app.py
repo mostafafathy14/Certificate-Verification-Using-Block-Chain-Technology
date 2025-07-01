@@ -12,7 +12,6 @@ load_dotenv()
 # Connect to Ganache with extended timeout
 provider = HTTPProvider("http://127.0.0.1:8545", request_kwargs={"timeout": 60})
 w3 = Web3(provider)
-contract_address = os.getenv("CONTRACT_ADDRESS")
 
 # Load ABI from build/contracts/CertificateRegistry.json
 try:
@@ -23,15 +22,26 @@ except FileNotFoundError:
     st.error("Error: build/contracts/CertificateRegistry.json not found. Run 'truffle compile' first.")
     st.stop()
 
-contract_address = os.getenv("CONTRACT_ADDRESS").strip()
-contract_address = Web3.to_checksum_address(contract_address)
+# Get contract address
+contract_address = os.getenv("CONTRACT_ADDRESS")
+if not contract_address:
+    st.error("❌ CONTRACT_ADDRESS not found in .env")
+    st.stop()
 
+contract_address = Web3.to_checksum_address(contract_address.strip())
 contract = w3.eth.contract(address=contract_address, abi=contract_abi)
 
 # Streamlit UI
 st.title("🎓 Certificate Verification System")
 
 option = st.selectbox("Choose an action", ["Generate Certificate", "Verify Certificate"])
+
+# Optional Sidebar: Show balances
+with st.sidebar:
+    st.subheader("💰 Ganache Accounts")
+    for acc in w3.eth.accounts:
+        bal = Web3.from_wei(w3.eth.get_balance(acc), 'ether')
+        st.text(f"{acc[:10]}...: {bal:.4f} ETH")
 
 # ---------------------------------------------------------------
 # GENERATE CERTIFICATE
@@ -65,7 +75,7 @@ if option == "Generate Certificate":
         except Exception as e:
             st.error(f"❌ IPFS upload failed: {e}")
             cid = "Unavailable"
-
+        
         # ✅ Display output before blockchain
         st.success("📄 Certificate generated successfully!")
         st.write(f"🆔 Certificate ID: `{cert_id}`")
@@ -77,40 +87,73 @@ if option == "Generate Certificate":
         if cid != "Unavailable":
             st.markdown(f"🔗 [View on IPFS](https://gateway.pinata.cloud/ipfs/{cid})")
 
-        with open(pdf_path, "rb") as f:
-            st.download_button("⬇️ Download Certificate PDF", f, file_name=f"{cert_id}.pdf")
+        pdf_url = f"/{pdf_path}"
+        if os.path.exists(pdf_path):
+            st.markdown(
+        f'<a href="{pdf_url}" download target="_blank">'
+        f'🟢 <button style="padding: 10px 20px; font-size: 16px;">⬇️ Download Certificate PDF</button>'
+        f'</a>',
+        unsafe_allow_html=True
+    )
 
         # Try blockchain interaction separately
         try:
+            sender = w3.eth.accounts[0]
+            min_required = Web3.to_wei(0.01, 'ether')
+            sender_balance = w3.eth.get_balance(sender)
+
+            # Auto-fund the account if low
+            if sender_balance < min_required:
+                st.warning("⚠️ Low balance detected. Attempting to auto-fund...")
+                funded = False
+                for donor in w3.eth.accounts[1:]:
+                    donor_balance = w3.eth.get_balance(donor)
+                    if donor_balance > Web3.to_wei(1, 'ether'):
+                        tx = {
+                            'from': donor,
+                            'to': sender,
+                            'value': Web3.to_wei(10, 'ether'),
+                            'gas': 21000,
+                            'gasPrice': w3.to_wei('1', 'gwei')
+                        }
+                        tx_hash = w3.eth.send_transaction(tx)
+                        w3.eth.wait_for_transaction_receipt(tx_hash)
+                        st.success(f"💸 Auto-funded `{sender}` with 10 ETH from `{donor}`")
+                        funded = True
+                        break
+                if not funded:
+                    st.error("❌ No donor account with enough ETH to fund the sender.")
+                    st.stop()
+
+            # Now send the blockchain transaction
             tx_hash = contract.functions.issueCertificate(
                 cert_id, cid, uid, candidate_name, course_name, org_name
-            ).transact({"from": w3.eth.accounts[0]})
+            ).transact({"from": sender})
             st.success("✅ Certificate issued on blockchain")
             st.write(f"📦 Transaction Hash: `{tx_hash.hex()}`")
+
         except Exception as e:
             st.warning(f"⚠️ Blockchain operation failed or skipped: {e}")
+    
+
 # ---------------------------------------------------------------
 # VERIFY CERTIFICATE
 # ---------------------------------------------------------------
 elif option == "Verify Certificate":
-    cert_id = st.text_input("Enter Certificate ID").strip()  # Remove spaces
+    cert_id = st.text_input("Enter Certificate ID").strip()
 
     if st.button("Verify"):
-        # Show some debug info to confirm values
         st.write("🔍 Verifying Certificate...")
         st.write("✅ Certificate ID:", cert_id)
         st.write("✅ Contract Address:", contract_address)
 
-        # Make sure connected to blockchain
         if not w3.is_connected():
             st.error("❌ Not connected to blockchain")
             st.stop()
 
         try:
-            # Optional: force the call to use account[0] for context
             result = contract.functions.verifyCertificate(cert_id).call({'from': w3.eth.accounts[0]})
             exists = result[0]
-
 
             if not exists:
                 st.error("❌ Certificate does not exist")
@@ -124,7 +167,6 @@ elif option == "Verify Certificate":
                 revoked = result[7]
                 issued_at = result[8]
 
-                
                 formatted_date = datetime.fromtimestamp(issued_at, tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
 
                 st.success("✅ Certificate found!")
@@ -140,9 +182,7 @@ elif option == "Verify Certificate":
                 ipfs_url = f"https://gateway.pinata.cloud/ipfs/{cid}"
                 st.markdown(f"[Download Certificate from IPFS]({ipfs_url})")
                 google_viewer = f"https://docs.google.com/gview?embedded=true&url={ipfs_url}"
-                # Embed the certificate in the browser
                 st.components.v1.iframe(google_viewer, height=600, width=800)
-    
 
         except Exception as e:
             import traceback

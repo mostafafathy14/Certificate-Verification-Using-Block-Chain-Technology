@@ -5,6 +5,7 @@ import platform
 import re
 import sys
 import requests
+import argparse
 
 # Windows-specific check
 def check_and_install_pywin32():
@@ -30,6 +31,8 @@ PROJECT_DIR = os.getcwd()
 OUTPUT_FILE = "migrate_output.txt"
 ENV_FILE = ".env"
 GANACHE_PORT = 8545
+MIGRATION_FLAG = ".migrated"
+GANACHE_DB_DIR = os.path.join(PROJECT_DIR, "ganache_db")
 
 # Process handles
 ganache_process = None
@@ -37,10 +40,14 @@ streamlit_process = None
 
 def open_ganache_process():
     global ganache_process
-    print("🚀 Launching Ganache...")
+    print("🚀 Launching Ganache with persistent state...")
+
+    if not os.path.exists(GANACHE_DB_DIR):
+        os.makedirs(GANACHE_DB_DIR)
+
     if platform.system() == "Windows":
         ganache_process = subprocess.Popen(
-            ['ganache', '--port', str(GANACHE_PORT)],
+            ['ganache', '--port', str(GANACHE_PORT), '--db', GANACHE_DB_DIR , '--deterministic'],
             creationflags=subprocess.CREATE_NEW_PROCESS_GROUP,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
@@ -48,7 +55,7 @@ def open_ganache_process():
         )
     else:
         ganache_process = subprocess.Popen(
-            ['ganache', '--port', str(GANACHE_PORT)],
+            ['ganache', '--port', str(GANACHE_PORT), '--db', GANACHE_DB_DIR , '--deterministic'],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL
         )
@@ -59,7 +66,7 @@ def wait_for_ganache(timeout=60):
     while True:
         try:
             response = requests.post("http://127.0.0.1:8545", json={
-                "jsonrpc":"2.0", "method":"web3_clientVersion", "params":[], "id":1
+                "jsonrpc": "2.0", "method": "web3_clientVersion", "params": [], "id": 1
             }, timeout=2)
             if response.status_code == 200:
                 print("🟢 Ganache is up and responding.")
@@ -162,26 +169,50 @@ def terminate_processes():
             print(f"❌ Error terminating Ganache: {e}")
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--reset", action="store_true", help="Force recompile and remigrate contracts and reset blockchain state")
+    args = parser.parse_args()
+
     try:
         print(f"📁 Current directory: {PROJECT_DIR}")
+
+        # Reset DB and migration if --reset used
+        if args.reset:
+            print("♻️ Resetting Ganache DB and contract migration...")
+            if os.path.exists(GANACHE_DB_DIR):
+                import shutil
+                shutil.rmtree(GANACHE_DB_DIR)
+            if os.path.exists(MIGRATION_FLAG):
+                os.remove(MIGRATION_FLAG)
+
         if not os.path.exists(os.path.join(PROJECT_DIR, "truffle-config.js")):
             raise Exception("❌ Not a Truffle project directory.")
+
         if platform.system() == "Windows":
             check_and_install_pywin32()
+
         open_ganache_process()
         wait_for_ganache()
-        run_truffle_compile()
-        run_truffle_migrate()
 
-        contract_address = extract_contract_address(OUTPUT_FILE)
-        if contract_address:
-            update_env_file(contract_address)
+        if not os.path.exists(MIGRATION_FLAG):
+            run_truffle_compile()
+            run_truffle_migrate()
+
+            contract_address = extract_contract_address(OUTPUT_FILE)
+            if contract_address:
+                update_env_file(contract_address)
+                with open(MIGRATION_FLAG, "w") as flag_file:
+                    flag_file.write("Migration complete.\n")
+                print("✅ Migration flag created.")
+            else:
+                print("❌ Contract address not found in migration logs.")
+                terminate_processes()
+                sys.exit(1)
         else:
-            print("❌ Contract address not found in migration logs.")
-            terminate_processes()
-            sys.exit(1)
+            print("📌 Migration already done. Skipping compile and migrate.")
 
         run_streamlit()
+
     except KeyboardInterrupt:
         print("⛔ Interrupted by user.")
     finally:
