@@ -4,6 +4,7 @@ import os
 import json
 from dotenv import load_dotenv
 from ipfs import generate_certificate, generate_certificate_id, upload_to_pinata
+from datetime import datetime, timezone
 
 # Load environment variables
 load_dotenv()
@@ -123,8 +124,8 @@ elif option == "Verify Certificate":
                 revoked = result[7]
                 issued_at = result[8]
 
-                from datetime import datetime
-                formatted_date = datetime.utcfromtimestamp(issued_at).strftime('%Y-%m-%d %H:%M:%S')
+                
+                formatted_date = datetime.fromtimestamp(issued_at, tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
 
                 st.success("✅ Certificate found!")
                 st.write(f"👤 Name: `{name}`")
@@ -139,10 +140,9 @@ elif option == "Verify Certificate":
                 ipfs_url = f"https://gateway.pinata.cloud/ipfs/{cid}"
                 st.markdown(f"[Download Certificate from IPFS]({ipfs_url})")
                 google_viewer = f"https://docs.google.com/gview?embedded=true&url={ipfs_url}"
-
                 # Embed the certificate in the browser
                 st.components.v1.iframe(google_viewer, height=600, width=800)
-                st.components.v1.iframe(ipfs_url, height=600)
+    
 
         except Exception as e:
             import traceback

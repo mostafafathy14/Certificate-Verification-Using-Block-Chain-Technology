@@ -5,7 +5,7 @@ Compiling your contracts...
 > Compiling @openzeppelin\contracts\utils\Context.sol
 > Compiling .\contracts\CertificateRegistry.sol
 > Compiling .\contracts\Migrations.sol
-> Artifacts written to D:\University\GP\Certificate-Verification-Using-Block-Chain-Technology\build\contracts
+> Artifacts written to E:\FCAI\4th level (second semester)\project_code\Certificate-Verification-Using-Block-Chain-Technology\build\contracts
 > Compiled successfully using:
    - solc: 0.8.21+commit.d9974bed.Emscripten.clang
 
@@ -13,7 +13,7 @@ Compiling your contracts...
 Starting migrations...
 ======================
 > Network name:    'development'
-> Network id:      1751373343656
+> Network id:      1751377929424
 > Block gas limit: 30000000 (0x1c9c380)
 
 
@@ -22,12 +22,12 @@ Starting migrations...
 
    Deploying 'Migrations'
    ----------------------
-   > transaction hash:    0xecf117b92a774b970e09f2c142eb975ce5fe76beccc16abef43407b398696900
+   > transaction hash:    0xeda9441bc07a206223d831f529d333423a0135d00fc55002a829719d194a42a1
    > Blocks: 0            Seconds: 0
-   > contract address:    0x3216C5ab3c87B40C4F0FbE6514ad097ADcdDcbCB
+   > contract address:    0x258aa68019249237A5F9327B3434d25d62c96B42
    > block number:        1
-   > block timestamp:     1751373363
-   > account:             0x78aF4d533a920b291f288B5279e5c5Dfc25daaF9
+   > block timestamp:     1751377938
+   > account:             0xd5c3Cdd047A825813AFfb285eb82f5cD09e73c93
    > balance:             999.99889690825
    > gas used:            326842 (0x4fcba)
    > gas price:           3.375 gwei
@@ -45,12 +45,12 @@ Starting migrations...
 
    Deploying 'CertificateRegistry'
    -------------------------------
-   > transaction hash:    0x52ee57be409f8c4ec70a67690687f7191edc9d4b2e1b26fa0e328b5719d92cca
+   > transaction hash:    0x4b616d05c52909f214d3cfb9f52432b0ac2e970f06118a155ed924bf2ed69230
    > Blocks: 0            Seconds: 0
-   > contract address:    0x7f60E6D0a181AFCD7e1bB0f134fa80195EFa9Ce6
+   > contract address:    0xd0f1AD42d3AD89020F9dD84E75909659Fe98e44F
    > block number:        3
-   > block timestamp:     1751373364
-   > account:             0x78aF4d533a920b291f288B5279e5c5Dfc25daaF9
+   > block timestamp:     1751377938
+   > account:             0xd5c3Cdd047A825813AFfb285eb82f5cD09e73c93
    > balance:             999.994202896566092265
    > gas used:            1432372 (0x15db34)
    > gas price:           3.172301144 gwei
@@ -72,11 +72,11 @@ This version of µWS is not compatible with your Node.js build:
 
 Error: Cannot find module '../binaries/uws_win32_x64_127.node'
 Require stack:
-- C:\Users\Abdo\AppData\Roaming\npm\node_modules\truffle\node_modules\ganache\node_modules\@trufflesuite\uws-js-unofficial\src\uws.js
-- C:\Users\Abdo\AppData\Roaming\npm\node_modules\truffle\node_modules\ganache\dist\node\core.js
-- C:\Users\Abdo\AppData\Roaming\npm\node_modules\truffle\build\migrate.bundled.js
-- C:\Users\Abdo\AppData\Roaming\npm\node_modules\truffle\node_modules\original-require\index.js
-- C:\Users\Abdo\AppData\Roaming\npm\node_modules\truffle\build\cli.bundled.js
+- C:\Users\Morsy\AppData\Roaming\npm\node_modules\truffle\node_modules\ganache\node_modules\@trufflesuite\uws-js-unofficial\src\uws.js
+- C:\Users\Morsy\AppData\Roaming\npm\node_modules\truffle\node_modules\ganache\dist\node\core.js
+- C:\Users\Morsy\AppData\Roaming\npm\node_modules\truffle\build\migrate.bundled.js
+- C:\Users\Morsy\AppData\Roaming\npm\node_modules\truffle\node_modules\original-require\index.js
+- C:\Users\Morsy\AppData\Roaming\npm\node_modules\truffle\build\cli.bundled.js
 Falling back to a NodeJS implementation; performance may be degraded.
 
 
