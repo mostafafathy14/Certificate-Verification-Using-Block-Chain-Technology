@@ -20,32 +20,10 @@ contract CertificateRegistry is Ownable {
 
     event CertificateIssued(string certificateId, string cid, address issuer);
     event CertificateRevoked(string certificateId);
-    event IssuerAdded(address issuer);
-    event IssuerRemoved(address issuer);
-
-    // Modifier to restrict to authorized issuers
-    modifier onlyIssuer() {
-        require(isIssuer[msg.sender], "Not authorized issuer");
-        _;
-    }
 
     // Constructor to initialize owner and add initial issuer
     constructor(address initialOwner) Ownable(initialOwner) {
         isIssuer[initialOwner] = true;
-    }
-
-    // Add a new issuer (onlyOwner)
-    function addIssuer(address newIssuer) public onlyOwner {
-        require(!isIssuer[newIssuer], "Already an issuer");
-        isIssuer[newIssuer] = true;
-        emit IssuerAdded(newIssuer);
-    }
-
-    // Remove an issuer (onlyOwner)
-    function removeIssuer(address issuer) public onlyOwner {
-        require(isIssuer[issuer], "Not an issuer");
-        isIssuer[issuer] = false;
-        emit IssuerRemoved(issuer);
     }
 
     // Issue a new certificate
@@ -56,7 +34,7 @@ contract CertificateRegistry is Ownable {
         string memory candidateName,
         string memory courseName,
         string memory organization
-    ) public onlyIssuer {
+    ) public {
         require(bytes(certificates[certificateId].cid).length == 0, "Certificate already exists");
 
         certificates[certificateId] = Certificate({
@@ -74,7 +52,7 @@ contract CertificateRegistry is Ownable {
     }
 
     // Revoke an existing certificate
-    function revokeCertificate(string memory certificateId) public onlyIssuer {
+    function revokeCertificate(string memory certificateId) public {
         require(certificates[certificateId].issuer == msg.sender, "Only issuer can revoke");
         certificates[certificateId].revoked = true;
         emit CertificateRevoked(certificateId);

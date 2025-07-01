@@ -5,7 +5,7 @@ Compiling your contracts...
 > Compiling @openzeppelin\contracts\utils\Context.sol
 > Compiling .\contracts\CertificateRegistry.sol
 > Compiling .\contracts\Migrations.sol
-> Artifacts written to D:\College & Courses\Certificate-Verification-Using-Block-Chain-Technology\build\contracts
+> Artifacts written to D:\University\GP\Certificate-Verification-Using-Block-Chain-Technology\build\contracts
 > Compiled successfully using:
    - solc: 0.8.21+commit.d9974bed.Emscripten.clang
 
@@ -13,7 +13,7 @@ Compiling your contracts...
 Starting migrations...
 ======================
 > Network name:    'development'
-> Network id:      1750893370530
+> Network id:      1751373343656
 > Block gas limit: 30000000 (0x1c9c380)
 
 
@@ -22,12 +22,12 @@ Starting migrations...
 
    Deploying 'Migrations'
    ----------------------
-   > transaction hash:    0x6f2e178eeb88301e3f964de73981f8071c61a71a50f1f235be1f3ea1d2c6807f
+   > transaction hash:    0xecf117b92a774b970e09f2c142eb975ce5fe76beccc16abef43407b398696900
    > Blocks: 0            Seconds: 0
-   > contract address:    0xF1cb2Dd67ea14A75DE595Ca0414094969f03e561
+   > contract address:    0x3216C5ab3c87B40C4F0FbE6514ad097ADcdDcbCB
    > block number:        1
-   > block timestamp:     1750893380
-   > account:             0xbC78bC3392d08022F8e9E1B0B6b1d2699C37466a
+   > block timestamp:     1751373363
+   > account:             0x78aF4d533a920b291f288B5279e5c5Dfc25daaF9
    > balance:             999.99889690825
    > gas used:            326842 (0x4fcba)
    > gas price:           3.375 gwei
@@ -45,38 +45,38 @@ Starting migrations...
 
    Deploying 'CertificateRegistry'
    -------------------------------
-   > transaction hash:    0xb4d5ecf2667b6f316e34b97452d164d86332083ca66c3e6e1cb705c7ae157637
+   > transaction hash:    0x52ee57be409f8c4ec70a67690687f7191edc9d4b2e1b26fa0e328b5719d92cca
    > Blocks: 0            Seconds: 0
-   > contract address:    0xf6f8536cDd34c92178002213525B7534b6d792dc
+   > contract address:    0x7f60E6D0a181AFCD7e1bB0f134fa80195EFa9Ce6
    > block number:        3
-   > block timestamp:     1750893380
-   > account:             0xbC78bC3392d08022F8e9E1B0B6b1d2699C37466a
-   > balance:             999.995563877202891145
-   > gas used:            1003352 (0xf4f58)
+   > block timestamp:     1751373364
+   > account:             0x78aF4d533a920b291f288B5279e5c5Dfc25daaF9
+   > balance:             999.994202896566092265
+   > gas used:            1432372 (0x15db34)
    > gas price:           3.172301144 gwei
    > value sent:          0 ETH
-   > total cost:          0.003182934697434688 ETH
+   > total cost:          0.004543915334233568 ETH
 
    > Saving migration to chain.
    > Saving artifacts
    -------------------------------------
-   > Total cost:     0.003182934697434688 ETH
+   > Total cost:     0.004543915334233568 ETH
 
 Summary
 =======
 > Total deployments:   2
-> Final cost:          0.004286026447434688 ETH
+> Final cost:          0.005647007084233568 ETH
 
 
 This version of µWS is not compatible with your Node.js build:
 
 Error: Cannot find module '../binaries/uws_win32_x64_127.node'
 Require stack:
-- C:\Users\LENOVO\AppData\Roaming\npm\node_modules\truffle\node_modules\ganache\node_modules\@trufflesuite\uws-js-unofficial\src\uws.js
-- C:\Users\LENOVO\AppData\Roaming\npm\node_modules\truffle\node_modules\ganache\dist\node\core.js
-- C:\Users\LENOVO\AppData\Roaming\npm\node_modules\truffle\build\migrate.bundled.js
-- C:\Users\LENOVO\AppData\Roaming\npm\node_modules\truffle\node_modules\original-require\index.js
-- C:\Users\LENOVO\AppData\Roaming\npm\node_modules\truffle\build\cli.bundled.js
+- C:\Users\Abdo\AppData\Roaming\npm\node_modules\truffle\node_modules\ganache\node_modules\@trufflesuite\uws-js-unofficial\src\uws.js
+- C:\Users\Abdo\AppData\Roaming\npm\node_modules\truffle\node_modules\ganache\dist\node\core.js
+- C:\Users\Abdo\AppData\Roaming\npm\node_modules\truffle\build\migrate.bundled.js
+- C:\Users\Abdo\AppData\Roaming\npm\node_modules\truffle\node_modules\original-require\index.js
+- C:\Users\Abdo\AppData\Roaming\npm\node_modules\truffle\build\cli.bundled.js
 Falling back to a NodeJS implementation; performance may be degraded.
 
 

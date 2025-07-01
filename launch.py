@@ -4,7 +4,9 @@ import os
 import platform
 import re
 import sys
-# Check if pywin32 is installed, if not, try to install it
+import requests
+
+# Windows-specific check
 def check_and_install_pywin32():
     try:
         import win32api
@@ -12,14 +14,9 @@ def check_and_install_pywin32():
         print("✅ pywin32 is already installed.")
     except ImportError:
         print("❌ pywin32 is not installed.")
-        install_pywin32 = input("Do you want to install pywin32? (y/n): ").strip().lower()
-        if install_pywin32 == 'y':
-            try:
-                subprocess.check_call([sys.executable, "-m", "pip", "install", "pywin32"])
-                print("✅ pywin32 installed successfully.")
-            except subprocess.CalledProcessError as e:
-                print(f"❌ Failed to install pywin32: {e}")
-                sys.exit(1)
+        install = input("Do you want to install pywin32? (y/n): ").strip().lower()
+        if install == 'y':
+            subprocess.check_call([sys.executable, "-m", "pip", "install", "pywin32"])
         else:
             print("⚠️ Cannot proceed without pywin32 on Windows.")
             sys.exit(1)
@@ -27,7 +24,7 @@ def check_and_install_pywin32():
 if platform.system() == "Windows":
     import win32api
     import win32con
-    
+
 # Constants
 PROJECT_DIR = os.getcwd()
 OUTPUT_FILE = "migrate_output.txt"
@@ -38,86 +35,85 @@ GANACHE_PORT = 8545
 ganache_process = None
 streamlit_process = None
 
-
 def open_ganache_process():
     global ganache_process
-    system = platform.system()
-
     print("🚀 Launching Ganache...")
-
-    if system == "Windows":
+    if platform.system() == "Windows":
         ganache_process = subprocess.Popen(
             ['ganache', '--port', str(GANACHE_PORT)],
             creationflags=subprocess.CREATE_NEW_PROCESS_GROUP,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
             shell=True
         )
     else:
         ganache_process = subprocess.Popen(
             ['ganache', '--port', str(GANACHE_PORT)],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
         )
 
-    time.sleep(5)
-    print(f"🟢 Ganache started with PID {ganache_process.pid}")
-
+def wait_for_ganache(timeout=60):
+    print("⏳ Waiting for Ganache to be ready on port 8545...")
+    start_time = time.time()
+    while True:
+        try:
+            response = requests.post("http://127.0.0.1:8545", json={
+                "jsonrpc":"2.0", "method":"web3_clientVersion", "params":[], "id":1
+            }, timeout=2)
+            if response.status_code == 200:
+                print("🟢 Ganache is up and responding.")
+                break
+        except Exception:
+            pass
+        if time.time() - start_time > timeout:
+            print("❌ Ganache did not start within time limit.")
+            terminate_processes()
+            sys.exit(1)
+        time.sleep(1)
 
 def run_truffle_compile():
-    print("🛠️ Running Truffle Compile...")
-    truffle_cmd = "truffle compile"
-    compile_process = subprocess.Popen(
-        truffle_cmd, shell=True, cwd=PROJECT_DIR,
-        stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    print("🛠️ Compiling contracts...")
+    compile_process = subprocess.run(
+        "truffle compile", shell=True, cwd=PROJECT_DIR
     )
-    stdout, stderr = compile_process.communicate()
-    print(stdout.decode())
-    if stderr:
-        print("⚠️ Truffle compile errors:\n", stderr.decode())
-
+    if compile_process.returncode != 0:
+        print("❌ Compile failed.")
+        terminate_processes()
+        sys.exit(1)
 
 def run_truffle_migrate():
-    print("🛠️ Running Truffle Migrate...")
-    truffle_cmd = "truffle migrate --network development --reset"
+    print("📦 Migrating contracts...")
     with open(OUTPUT_FILE, 'w') as file:
         file.write('')
-
-    migrate_process = subprocess.Popen(
-        truffle_cmd, shell=True, cwd=PROJECT_DIR,
+    migrate_process = subprocess.run(
+        "truffle migrate --reset --network development",
+        shell=True, cwd=PROJECT_DIR,
         stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
-    stdout, stderr = migrate_process.communicate()
-
     with open(OUTPUT_FILE, "w") as file:
-        file.write(stdout.decode())
-        file.write(stderr.decode())
-
-    print("✔️ Truffle migration complete.")
-
+        file.write(migrate_process.stdout.decode())
+        file.write(migrate_process.stderr.decode())
+    print("✅ Migration complete.")
 
 def extract_contract_address(file_path, contract_name="CertificateRegistry"):
     with open(file_path, 'r') as file:
         lines = file.readlines()
-
     contract_address = None
-    inside_target_deploy = False
+    inside_target = False
     for line in lines:
         if f"Deploying '{contract_name}'" in line:
-            inside_target_deploy = True
-        elif inside_target_deploy and "> contract address:" in line:
-            match = re.search(r'> contract address:\s+(0x[a-fA-F0-9]+)', line)
+            inside_target = True
+        elif inside_target and "> contract address:" in line:
+            match = re.search(r'0x[a-fA-F0-9]{40}', line)
             if match:
-                contract_address = match.group(1)
+                contract_address = match.group(0)
                 break
-
     return contract_address
-
 
 def update_env_file(address, env_path=".env"):
     updated_lines = []
     found = False
-
     if os.path.exists(env_path):
         with open(env_path, "r") as file:
             for line in file:
@@ -126,79 +122,68 @@ def update_env_file(address, env_path=".env"):
                     found = True
                 else:
                     updated_lines.append(line)
-
     if not found:
         updated_lines.append(f"CONTRACT_ADDRESS={address}\n")
-
     with open(env_path, "w") as file:
         file.writelines(updated_lines)
-
+    print(f"📄 .env updated with contract address: {address}")
 
 def run_streamlit():
     global streamlit_process
-    print("🚀 Running Streamlit...")
+    print("🚀 Launching Streamlit app...")
     streamlit_process = subprocess.Popen(
         [sys.executable, "-m", "streamlit", "run", "app.py"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
         cwd=PROJECT_DIR
     )
-
     try:
-        streamlit_process.communicate()
+        streamlit_process.wait()
     except KeyboardInterrupt:
         pass
 
-
-def terminate_ganache_and_streamlit():
-    print("⏹️ Terminating processes...")
-
+def terminate_processes():
+    print("🛑 Cleaning up processes...")
     if streamlit_process:
         try:
             streamlit_process.terminate()
-            streamlit_process.wait()
+            streamlit_process.wait(timeout=5)
             print("✅ Streamlit terminated.")
         except Exception as e:
             print(f"❌ Error terminating Streamlit: {e}")
-
     if ganache_process:
         try:
             if platform.system() == "Windows":
                 print("⚠️ Sending CTRL_BREAK_EVENT to Ganache...")
                 win32api.GenerateConsoleCtrlEvent(win32con.CTRL_BREAK_EVENT, ganache_process.pid)
-                ganache_process.wait(timeout=5)
-                print("✅ Ganache terminated with CTRL_BREAK_EVENT.")
             else:
                 ganache_process.terminate()
-                ganache_process.wait(timeout=5)
-                print("✅ Ganache terminated with SIGTERM.")
+            ganache_process.wait(timeout=5)
+            print("✅ Ganache terminated.")
         except Exception as e:
             print(f"❌ Error terminating Ganache: {e}")
 
-
 if __name__ == "__main__":
     try:
-        print(f"📁 Checking project directory: {PROJECT_DIR}")
+        print(f"📁 Current directory: {PROJECT_DIR}")
         if not os.path.exists(os.path.join(PROJECT_DIR, "truffle-config.js")):
-            raise Exception("❌ Not in correct project directory. 'truffle-config.js' not found.")
+            raise Exception("❌ Not a Truffle project directory.")
         if platform.system() == "Windows":
             check_and_install_pywin32()
         open_ganache_process()
+        wait_for_ganache()
         run_truffle_compile()
         run_truffle_migrate()
 
         contract_address = extract_contract_address(OUTPUT_FILE)
-
         if contract_address:
-            print(f"✅ Contract address: {contract_address}")
             update_env_file(contract_address)
         else:
-            print("❌ Contract address not found in migration output.")
+            print("❌ Contract address not found in migration logs.")
+            terminate_processes()
+            sys.exit(1)
 
         run_streamlit()
-
     except KeyboardInterrupt:
-        print("\n⛔ KeyboardInterrupt received.")
+        print("⛔ Interrupted by user.")
     finally:
-        terminate_ganache_and_streamlit()
+        terminate_processes()
         print("✅ All processes cleaned up.")
