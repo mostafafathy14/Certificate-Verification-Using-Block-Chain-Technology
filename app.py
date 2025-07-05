@@ -397,7 +397,10 @@ def verify_on_chain(cert_id):
             st.markdown(f"[Download Certificate from IPFS]({ipfs_url})")
             google_viewer = f"https://docs.google.com/gview?embedded=true&url={ipfs_url}"
             st.components.v1.iframe(google_viewer, height=600, width=800)
-            
+            ipfs_url = f"https://gateway.pinata.cloud/ipfs/{cert[5]}"
+            st.markdown(f"[Download Certificate from IPFS]({ipfs_url})")
+            google_viewer = f"https://docs.google.com/gview?embedded=true&url={ipfs_url}"
+            st.components.v1.iframe(google_viewer, height=600, width=800)
     except Exception as e: 
         st.error(f"❌ Blockchain error: {e}")
     
