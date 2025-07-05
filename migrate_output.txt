@@ -1,19 +1,13 @@
-
+
 Compiling your contracts...
 ===========================
-> Compiling @openzeppelin\contracts\access\Ownable.sol
-> Compiling @openzeppelin\contracts\utils\Context.sol
-> Compiling .\contracts\CertificateRegistry.sol
-> Compiling .\contracts\Migrations.sol
-> Artifacts written to E:\FCAI\4th level (second semester)\project_code\Certificate-Verification-Using-Block-Chain-Technology\build\contracts
-> Compiled successfully using:
-   - solc: 0.8.21+commit.d9974bed.Emscripten.clang
+> Everything is up to date, there is nothing to compile.
 
 
 Starting migrations...
 ======================
 > Network name:    'development'
-> Network id:      1751387575484
+> Network id:      1751718842649
 > Block gas limit: 30000000 (0x1c9c380)
 
 
@@ -22,11 +16,11 @@ Starting migrations...
 
    Deploying 'Migrations'
    ----------------------
-   > transaction hash:    0x842a6c9cc41e72172650d36ce9f1781b31e3d74541069fd5ec526c27a6c92242
+   > transaction hash:    0x9d386fec14a712f8f6c4ed37ffcd551e3ab8e5d3b476b25ad25e868cd4fb2e90
    > Blocks: 0            Seconds: 0
    > contract address:    0xe78A0F7E598Cc8b0Bb87894B0F60dD2a88d6a8Ab
    > block number:        1
-   > block timestamp:     1751387581
+   > block timestamp:     1751718852
    > account:             0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1
    > balance:             999.99889690825
    > gas used:            326842 (0x4fcba)
@@ -45,11 +39,11 @@ Starting migrations...
 
    Deploying 'CertificateRegistry'
    -------------------------------
-   > transaction hash:    0xf4caea720119a57c9abd81ba5f471f50231b3b12f4e2df5e0feb8fb21bb1b227
+   > transaction hash:    0x8d7bb5ae7b3e0f3cbfbbb8c4af95badb86248df47e7f3868251aea5c65730b61
    > Blocks: 0            Seconds: 0
    > contract address:    0xCfEB869F69431e42cdB54A4F4f105C19C080A601
    > block number:        3
-   > block timestamp:     1751387581
+   > block timestamp:     1751718852
    > account:             0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1
    > balance:             999.994202896566092265
    > gas used:            1432372 (0x15db34)
@@ -66,18 +60,6 @@ Summary
 =======
 > Total deployments:   2
 > Final cost:          0.005647007084233568 ETH
-
-
-This version of µWS is not compatible with your Node.js build:
-
-Error: Cannot find module '../binaries/uws_win32_x64_127.node'
-Require stack:
-- C:\Users\Morsy\AppData\Roaming\npm\node_modules\truffle\node_modules\ganache\node_modules\@trufflesuite\uws-js-unofficial\src\uws.js
-- C:\Users\Morsy\AppData\Roaming\npm\node_modules\truffle\node_modules\ganache\dist\node\core.js
-- C:\Users\Morsy\AppData\Roaming\npm\node_modules\truffle\build\migrate.bundled.js
-- C:\Users\Morsy\AppData\Roaming\npm\node_modules\truffle\node_modules\original-require\index.js
-- C:\Users\Morsy\AppData\Roaming\npm\node_modules\truffle\build\cli.bundled.js
-Falling back to a NodeJS implementation; performance may be degraded.
 
 
 - Blocks: 0            Seconds: 0

@@ -89,6 +89,8 @@ def generate_certificate(output_path: str, uid: str, candidate_name: str, course
 
     print(f"Certificate generated and saved at: {output_path}")
 
-def generate_certificate_id(uid: str, name: str, course: str, org: str) -> str:
-    data = f"{uid}{name}{course}{org}".encode('utf-8')
-    return hashlib.sha256(data).hexdigest()
+def generate_certificate_id(pdf_path: str) -> str:
+    """Generate a SHA-256 hash of the PDF content as certificate ID."""
+    with open(pdf_path, "rb") as f:
+        file_bytes = f.read()
+    return hashlib.sha256(file_bytes).hexdigest()
