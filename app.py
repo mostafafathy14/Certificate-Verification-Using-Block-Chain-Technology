@@ -102,8 +102,8 @@ def show_home():
 
     col1, col2 = st.columns(2)
 
-    admin_image_path = "Images/admin.png"
-    verifier_image_path = "Images/verifier.png"
+    admin_image_path = "images/admin.png"
+    verifier_image_path = "images/verifier.png"
 
     with col1:
         if os.path.exists(admin_image_path):
@@ -268,7 +268,7 @@ def generate_certificate_ui():
     if submitted:
         os.makedirs("certificates", exist_ok=True)
         temp_pdf_path = "certificates/temp.pdf"
-        logo_path = "Cairo_University.png"
+        logo_path = "images/Cairo_University.png"
 
         try:
             generate_certificate(temp_pdf_path, uid, name, course, logo_path)
@@ -393,7 +393,11 @@ def verify_on_chain(cert_id):
 
             # Optional: direct link to certificate
             st.markdown(f"[🔗 View on IPFS](https://gateway.pinata.cloud/ipfs/{cert[5]})", unsafe_allow_html=True)
-
+            ipfs_url = f"https://gateway.pinata.cloud/ipfs/{cert[5]}"
+            st.markdown(f"[Download Certificate from IPFS]({ipfs_url})")
+            google_viewer = f"https://docs.google.com/gview?embedded=true&url={ipfs_url}"
+            st.components.v1.iframe(google_viewer, height=600, width=800)
+            
     except Exception as e: 
         st.error(f"❌ Blockchain error: {e}")
     
